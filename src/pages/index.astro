@@ -1,6 +1,8 @@
 ---
-import {db, User} from "astro:db"
+import {eq} from "astro:db"
+import {db, User, Category, Todo} from "astro:db"
 const users = await db.select().from(User);
+const todos = await db.select().from(Todo).innerJoin(User, eq(Todo.user_id, User.id))
 ---
 
 <html lang="en">
