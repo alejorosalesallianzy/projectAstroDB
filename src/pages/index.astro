@@ -19,9 +19,7 @@ console.log(todos);
 		<h1>todos</h1>
 		<ul>
 
-			{todos.map((todo => 
-			
-			<li>{"Titulo: ${todo.Todo.title}, categoria: ${todo.Category.label}, Creador: ${todo.User.username}"}</li>))
+			{todos.map((todo => <li>{`Titulo: ${todo.Todo.title}, categoria: ${todo.Category.label}, Creador: ${todo.User.username}`}</li>))
 			}
 		</ul>
 	</body>
