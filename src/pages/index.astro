@@ -2,7 +2,9 @@
 import {eq} from "astro:db"
 import {db, User, Category, Todo} from "astro:db"
 const users = await db.select().from(User);
-const todos = await db.select().from(Todo).innerJoin(User, eq(Todo.user_id, User.id))
+const todos = await db.select().from(Todo).innerJoin(User, eq(Todo.user_id, User.id)).innerJoin(Category, eq(Todo.category_id, Category.id));
+
+console.log(todos);
 ---
 
 <html lang="en">
@@ -14,11 +16,13 @@ const todos = await db.select().from(Todo).innerJoin(User, eq(Todo.user_id, User
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>Usuarios</h1>
+		<h1>todos</h1>
 		<ul>
 
-			{users.map((user) => <li>{user.username}</li>)}
+			{todos.map((todo => 
 			
+			<li>{"Titulo: ${todo.Todo.title}, categoria: ${todo.Category.label}, Creador: ${todo.User.username}"}</li>))
+			}
 		</ul>
 	</body>
 </html>
