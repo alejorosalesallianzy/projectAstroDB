@@ -1,26 +1,49 @@
 ---
-import {eq} from "astro:db"
-import {db, User, Category, Todo} from "astro:db"
-const users = await db.select().from(User);
-const todos = await db.select().from(Todo).innerJoin(User, eq(Todo.user_id, User.id)).innerJoin(Category, eq(Todo.category_id, Category.id));
+if(Astro.request.method === "POST"){
+    //creat TODO
+    const formData = await Astro.request.formData();
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const category_id = formData.get("category_id");
+    console.log({title, description, category_id});
+    if(typeof title === 'string' && description === 'string' && category_id === 'string') {
 
-console.log(todos);
+    }
+    db.insert(Todo).values({title, description, category_id, user_id:"aña90@2"})
+
+}
+import { db,Category, Todo} from "astro:db";
+const categories = await db.select().from(Category);
+
 ---
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="max-w-md w-full mx-auto bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800 text-center">Formulario Mejorado</h2>
+        <form method="post" class="space-y-4">
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                <input type="text" id="title" name="title" class="mt-1 py-2 px-3 border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"/>
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="description" rows="3" class="mt-1 py-2 px-3 border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"></textarea>
+            </div>
+            <div>
+                <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
+                <select id="category_id" name="category_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white shadow-sm sm:text-sm rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                
+{
+    categories.map(category => (
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>todos</h1>
-		<ul>
-
-			{todos.map((todo => <li>{`Titulo: ${todo.Todo.title}, categoria: ${todo.Category.label}, Creador: ${todo.User.username}`}</li>))
-			}
-		</ul>
-	</body>
-</html>
+    <option value={category.id}>{category.label}</option>
+    ))
+}
+                
+            </select>
+        </div>
+        <!-- Botón Submit -->
+        <button type="submit" class="mt-4 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Submit
+        </button>
+    </form>
+</div>
